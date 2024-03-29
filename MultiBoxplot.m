@@ -28,22 +28,6 @@ classdef MultiBoxplot
    methods
        % Define a multiboxplot from an array, where each column is the data
        % for a box plot
-%        function obj = MultiBoxplot(opts)
-%            arguments
-%                 opts.?MultiBoxplot
-%             end
-%             
-%             setupper = false;
-%             setlower = false;
-%             for prop = string(fieldnames(opts))'
-%                 obj.(prop) = opts.(prop);
-%                 if prop == "UpperLimit"
-%                     setupper = true;
-%                 elseif prop == "LowerLimit"
-%                     setlower = true;
-%                 end
-%             end
-%        end
     function obj = MultiBoxplot(data_sets, plot_title, box_names, opts )
            arguments
                data_sets
@@ -69,8 +53,6 @@ classdef MultiBoxplot
            elseif nargin < 2
                error('Insufficient number of inputs provided.');
            end
-%                if class(plot_title) ~= 'char'
-%                    error('If using two inputs, second should be')
            obj.Title = plot_title;
            for prop = string(fieldnames(opts))'
                 obj.(prop) = opts.(prop);
@@ -82,14 +64,14 @@ classdef MultiBoxplot
            end
            obj = obj.updateAutoLimits();
        end
-       % Define a multiboxplot from a table
-       function obj = MultiBoxplotT(table, plot_title)
-           %varfun(@class,table,'OutputFormat','cell')
-           obj.BoxDataTable = table;
-           obj.Title = plot_title;
-           obj = obj.updateAutoLimits();
-       end
+       
+       % Add an extra box of data, can add multiple as a list
        function obj = addBox(obj, box_vector, box_name)
+           arguments (Repeating)
+               obj
+               box_vector {mustBeVector, mustBeNumeric} 
+               box_name {mustBeText} 
+           end
            obj.BoxDataTable = addVars(obj.BoxDataTable, box_vector, 'NewVariableNames', {box_name});
        end
        function obj = set.AutoYLimitMarginMult(obj,val)
